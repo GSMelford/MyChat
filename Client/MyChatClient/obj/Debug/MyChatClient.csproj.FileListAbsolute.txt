@@ -57,3 +57,37 @@ E:\Files\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.exe
 E:\Files\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.pdb
 E:\Files\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.RegistrationForm.resources
 E:\Files\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.EmailForm.resources
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\MyChatClient.exe.config
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\MyChatClient.exe
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\MyChatClient.pdb
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\System.Buffers.dll
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\System.Memory.dll
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\System.Numerics.Vectors.dll
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\System.Text.Encodings.Web.dll
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\System.Text.Json.dll
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\System.Threading.Tasks.Extensions.dll
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\System.ValueTuple.dll
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\System.Buffers.xml
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\System.Memory.xml
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\System.Numerics.Vectors.xml
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\System.Text.Encodings.Web.xml
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\System.Text.Json.xml
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\System.Threading.Tasks.Extensions.xml
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\System.ValueTuple.xml
+E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.csprojAssemblyReference.cache
+E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.EmailForm.resources
+E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.RegistrationForm.resources
+E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.Properties.Resources.resources
+E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.csproj.GenerateResource.cache
+E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.csproj.CoreCompileInputs.cache
+E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.csproj.CopyComplete
+E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.exe
+E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.pdb
+E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.AuthorizationForm.resources
+E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.MessengerForm.resources
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\Newtonsoft.Json.dll
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\Newtonsoft.Json.xml

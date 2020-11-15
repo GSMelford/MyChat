@@ -14,6 +14,7 @@ namespace MyChatServer
         public string Password;
         public int EmailCode;
         protected internal NetworkStream Stream { get; private set; }
+        protected internal StreamWriter streamWriter { get; private set; }
         ServerObject serverObject;
         TcpClient tcpClient;
         
@@ -23,7 +24,7 @@ namespace MyChatServer
             this.tcpClient = tcpClient;
             this.serverObject = serverObject;
             serverObject.AddConnection(this);
-            Console.WriteLine("Unknown connection. Issued ID:" + Id);
+            Console.WriteLine($"Client ID: {Id}. Unknown connection.");
         }
         public void SetDataUser(string username, string email, string password)
         {
@@ -36,7 +37,8 @@ namespace MyChatServer
             try
             {
                 Stream = tcpClient.GetStream();
-                DistributorRequests distributorRequests = new DistributorRequests(this);
+                streamWriter = new StreamWriter(Stream);
+                DistributorRequests distributorRequests = new DistributorRequests(this, serverObject);
                 while (true)
                 {
                     distributorRequests.RequestActivation(serverObject.GetMessage(Id));
@@ -44,7 +46,7 @@ namespace MyChatServer
             }
             catch (Exception)
             {
-                Console.WriteLine($"The connection with the user under id was lost:{Id}");
+                Console.WriteLine($"Client ID: {Id}. Disconnected.");
             }
             finally
             {
@@ -62,6 +64,7 @@ namespace MyChatServer
             Stream.Write(sizeRequestsByte, 0, sizeRequestsByte.Length);
             Stream.Write(data, 0, data.Length);
         }
+        
         protected internal void Close()
         {
             if (Stream != null)

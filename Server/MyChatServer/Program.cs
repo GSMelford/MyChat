@@ -12,18 +12,16 @@ namespace MyChatServer
     {
         static ServerObject server; // сервер
         static Thread listenThread; // потока для прослушивания
-        
+
+
         static void Main(string[] args)
         {
             try
             {
                 server = new ServerObject();
-
-                if (!Directory.Exists(ServerObject.Database_catalog))  
-                    Directory.CreateDirectory(ServerObject.Database_catalog);
-
+                ServerDirectory.CreateDirectory();
                 listenThread = new Thread(new ThreadStart(server.Listen));
-                listenThread.Start(); //старт потока
+                listenThread.Start();
             }
             catch (Exception ex)
             {
@@ -31,5 +29,6 @@ namespace MyChatServer
                 Console.WriteLine(ex.Message);
             }
         }
+        
     }
 }

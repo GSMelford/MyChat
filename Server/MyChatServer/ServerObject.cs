@@ -11,9 +11,7 @@ namespace MyChatServer
     public class ServerObject
     {
         static TcpListener tcpListener; // сервер для прослушивания
-        List<ClientObject> users = new List<ClientObject>(); // Список все 
-        static public string Database_catalog = @"DataBase";
-        static public string Database_path = @"DataBase\database.txt";
+        static public List<ClientObject> users = new List<ClientObject>(); // Список все 
         protected internal void AddConnection(ClientObject clientObject)
         {
             users.Add(clientObject);
@@ -49,15 +47,18 @@ namespace MyChatServer
         }
         protected internal string GetMessage(string id)
         {
-            Console.WriteLine("Waits for a message from ID:" + id);
+            Console.WriteLine($"Client ID: {id}. We are awaiting a request.");
             ClientObject client = users.FirstOrDefault(c => c.Id == id);
             StringBuilder builder = new StringBuilder();
             int bytes = 0;
             byte[] sizeRequestsByte = new byte[4];
             client.Stream.Read(sizeRequestsByte, 0, sizeRequestsByte.Length);
+            int a = BitConverter.ToInt32(sizeRequestsByte, 0);
             byte[] requestsByte = new byte[BitConverter.ToInt32(sizeRequestsByte, 0)];
             bytes = client.Stream.Read(requestsByte, 0, BitConverter.ToInt32(sizeRequestsByte, 0));
             builder.Append(Encoding.UTF8.GetString(requestsByte, 0, bytes));
+            if (builder.ToString() == string.Empty)
+                client.Close();
             return builder.ToString();
         }
         protected internal void Disconnect()

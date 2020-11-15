@@ -5,27 +5,30 @@ using System.Text.Json;
 using System.Runtime.InteropServices;
 using System.Text;
 using MyChatClient.RequestsJSON;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Threading;
+using System.IO;
 
 namespace MyChatClient
 {
-    class ClientLogic
+    static class ClientLogic
     {
-        public string Username { get; }
-        public string Email { get; }
-        public string Password { get; }
+        public static string Username = string.Empty;
+        public static string Email = string.Empty;
+        public static string Password = string.Empty;
+        public static string FriendUserNow = string.Empty;
+
         private const string Host = "178.150.32.105";
         private const int Port = 1234;
+
         static TcpClient Client;
         static NetworkStream Stream;
-        static CreateRequests AnswerDistributor;
-        public ClientLogic(string username, string email, string password)
-        {
-            this.Username = username;
-            this.Email = email;
-            this.Password = password;
-            AnswerDistributor = new CreateRequests(this);
-        }
+        static public Thread reciveThread;
+        public static bool AllowMessenger = false;
 
+        public static List<Button> FriendList = new List<Button>();
         public static bool ServerConnection()
         {
             Client = new TcpClient();
@@ -40,12 +43,7 @@ namespace MyChatClient
                 return false;
             }
         }
-
-        public static bool CheckConnection()
-        {
-            return Client.Connected;
-        }
-        public void SendMessage(string json)
+        public static void SendMessage(string json)
         {
             byte[] data = Encoding.UTF8.GetBytes(json);
 
@@ -55,7 +53,7 @@ namespace MyChatClient
             Stream.Write(sizeRequestsByte, 0, sizeRequestsByte.Length);
             Stream.Write(data, 0, data.Length);
         }
-        public string GetMessage()
+        public static void GetMessage()
         {
             StringBuilder builder = new StringBuilder();
             int bytes = 0;
@@ -64,7 +62,7 @@ namespace MyChatClient
             byte[] requestsByte = new byte[BitConverter.ToInt32(sizeRequestsByte, 0)];
             bytes = Stream.Read(requestsByte, 0, BitConverter.ToInt32(sizeRequestsByte, 0));
             builder.Append(Encoding.UTF8.GetString(requestsByte, 0, bytes));
-            return builder.ToString();
+
         }
         static void Disconnect()
         {
@@ -74,5 +72,4 @@ namespace MyChatClient
                 Client.Close();
         }
     }
-    
 }

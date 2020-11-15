@@ -21,8 +21,6 @@ namespace MyChatClient
         private string authorization_path = @"AuthorizationSave\AuthorizationSave.txt";
         bool AllowRegistration = false;
         public int EmailCode;
-        ClientLogic Client;
-        CreateRequests CreateRequests;
 
         public RegistrationForm()
         {
@@ -39,12 +37,15 @@ namespace MyChatClient
             {
                 ConnectStatus_label.Text = "Подключение к серверу отсутствует.";
             }
+            ClientLogic.reciveThread = new Thread(new ThreadStart(ClientLogic.GetMessage));
+            Username_textBox.Text = "GSMelford";
+            Email_textBox.Text = "fedorenko.max163@gmail.com";
+            Password_textBox.Text = "228";
         }
         private void Login_button_Click(object sender, EventArgs e)
         {
-            Client = new ClientLogic(Username_textBox.Text, Email_textBox.Text, Password_textBox.Text);
-            CreateRequests = new CreateRequests(Client);
-            AllowRegistration = CreateRequests.Registration();
+            AllowRegistration = CreateRequests.Registration(Username_textBox.Text, Email_textBox.Text, Password_textBox.Text);
+
             if (AllowRegistration)
             {
                 EmailForm emailForm = new EmailForm(this);
@@ -58,6 +59,13 @@ namespace MyChatClient
                 Password_textBox.UseSystemPasswordChar = true;
             else
                 Password_textBox.UseSystemPasswordChar = false;
+        }
+
+        private void Login_label_Click(object sender, EventArgs e)
+        {
+            AuthorizationForm authorizationForm = new AuthorizationForm(this);
+            authorizationForm.Show();
+            this.Hide();
         }
     }
 }

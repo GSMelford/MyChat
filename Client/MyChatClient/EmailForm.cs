@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -39,15 +40,12 @@ namespace MyChatClient
             {
                 if (RegForm.RequestsEmailCode(number))
                 {
-                    MessageBox.Show("Вы зарегистрировались. Поздравляем!");
-                    RegForm.Show();
+                    AuthorizationForm authorizationForm = new AuthorizationForm(RegForm);
+                    authorizationForm.Show();
                     this.Close();
                 }
                 else
-                {
                     CodeEmail_textBox.Clear();
-                    MessageBox.Show("Некорректный ввод!");
-                }
             }
         }
     }
