@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace MyChatServer.RequestsJSON
 {
-    class EmailCheackJSON
+    class EmailConfirmationJSON
     {
-        public string Key { get; set; } = "emailverification";
+        public string Key { get; set; } = "emailconfirmation";
         public int Code { get; set; }
     }
 }

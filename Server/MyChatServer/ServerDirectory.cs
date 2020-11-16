@@ -36,6 +36,8 @@ namespace MyChatServer
                 Chats.Create();
                 Console.WriteLine("Server create Chats_catalog.");
             }
+            if (!File.Exists(ServerDirectory.Database_path))
+                File.Create(ServerDirectory.Database_path);
         }
         public static void CreatePersonalCatalog(string username, string email, string password)
         {

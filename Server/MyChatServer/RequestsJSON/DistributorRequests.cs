@@ -39,11 +39,11 @@ namespace MyChatServer
                     Console.WriteLine("Requests: " + json);
                     Registration(registrationJSON);
                     break;
-                case "emailverification":
-                    EmailCheackJSON emailCheackJSON = System.Text.Json.JsonSerializer.Deserialize<EmailCheackJSON>(json);
+                case "emailconfirmation":
+                    EmailConfirmationJSON emailConfirmationJSON = System.Text.Json.JsonSerializer.Deserialize<EmailConfirmationJSON>(json);
                     Console.WriteLine($"Client ID: {Client.Id}. Email confirmation request.");
                     Console.WriteLine("Requests: " + json);
-                    EmailCodeVerification(emailCheackJSON);
+                    EmailCodeVerification(emailConfirmationJSON);
                     break;
                 case "authorization":
                     AuthorizationJSON authorizationJSON = System.Text.Json.JsonSerializer.Deserialize<AuthorizationJSON>(json);
@@ -79,7 +79,6 @@ namespace MyChatServer
                     break;
             }
         }
-
         private void Registration(RegistrationJSON registrationJSON)
         {
             bool verification = false;
@@ -91,6 +90,8 @@ namespace MyChatServer
                     string line; //Сделать оптимизацию ввиде брейка
                     while ((line = sr.ReadLine()) != null)
                     {
+                        if (line == string.Empty)
+                            continue;
                         if (line == registrationJSON.Username)
                         {
                             reason = "Такой никнейм уже существует.";
@@ -120,7 +121,7 @@ namespace MyChatServer
 
                 AllowJSON allow = new AllowJSON() { Allow = true, Reason = reason };
                 string allowJSON = System.Text.Json.JsonSerializer.Serialize<AllowJSON>(allow);
-                Client.SendMessage(allowJSON);
+                Client.SendAnswer(allowJSON);
                 SendCodeEmail(registrationJSON.Email, registrationJSON.Username);
             }
             else
@@ -129,7 +130,7 @@ namespace MyChatServer
 
                 AllowJSON allow = new AllowJSON() { Allow = false, Reason = reason };
                 string allowJSON = System.Text.Json.JsonSerializer.Serialize<AllowJSON>(allow);
-                Client.SendMessage(allowJSON);
+                Client.SendAnswer(allowJSON);
             }
         }
         private void Authorization(AuthorizationJSON authorizationJSON)
@@ -143,6 +144,8 @@ namespace MyChatServer
                     string line; //Сделать оптимизацию ввиде брейка
                     while ((line = sr.ReadLine()) != null)
                     {
+                        if (line == string.Empty)
+                            continue;
                         string usernameTemp = line;
                         string emailTemp;
                         if (line == authorizationJSON.UsernameOrEmail)
@@ -190,19 +193,19 @@ namespace MyChatServer
             {
                 AllowJSON allow = new AllowJSON() { Allow = true, Reason = "Сервер разрешает авторизацию." };
                 string allowJSON = System.Text.Json.JsonSerializer.Serialize<AllowJSON>(allow);
-                Client.SendMessage(allowJSON);
+                Client.SendAnswer(allowJSON);
             }
             else
             {
                 AllowJSON allow = new AllowJSON() { Allow = false, Reason = reason };
                 string allowJSON = System.Text.Json.JsonSerializer.Serialize<AllowJSON>(allow);
-                Client.SendMessage(allowJSON);
+                Client.SendAnswer(allowJSON);
             }
         }
-        private void EmailCodeVerification(EmailCheackJSON emailCheackJSON)
+        private void EmailCodeVerification(EmailConfirmationJSON emailConfirmationJSON)
         {
             Console.WriteLine($"Client ID: {Client.Id}. Sent a verification code.");
-            if(Client.EmailCode == emailCheackJSON.Code)
+            if(Client.EmailCode == emailConfirmationJSON.Code)
             {
                 Console.WriteLine($"Client ID: {Client.Id}. The confirmation code is correct.");
                 try
@@ -223,7 +226,7 @@ namespace MyChatServer
                 
                 AllowJSON allow = new AllowJSON() { Allow = true, Reason = "Клиент успешно зарегистрировался!" };
                 string allowJSON = System.Text.Json.JsonSerializer.Serialize<AllowJSON>(allow);
-                Client.SendMessage(allowJSON);
+                Client.SendAnswer(allowJSON);
 
                 ServerDirectory.CreatePersonalCatalog(Client.Username, Client.Email, Client.Password);
             }
@@ -232,7 +235,7 @@ namespace MyChatServer
                 Console.WriteLine($"Client ID: {Client.Id}. The confirmation code is incorrect.");
                 AllowJSON allow = new AllowJSON() { Allow = false, Reason = "Неправильный код." };
                 string allowJSON = System.Text.Json.JsonSerializer.Serialize<AllowJSON>(allow);
-                Client.SendMessage(allowJSON);
+                Client.SendAnswer(allowJSON);
             }
         }
         private void AddFriend(AddFriendJSON addFriendJSON)
@@ -242,37 +245,41 @@ namespace MyChatServer
             {
                 AllowJSON allow = new AllowJSON() { Allow = false, Reason = "Такого пользователя нету в базе данных." };
                 string allowJSON = System.Text.Json.JsonSerializer.Serialize<AllowJSON>(allow);
-                Client.SendMessage(allowJSON);
+                Client.SendAnswer(allowJSON);
                 return;
             } 
             if (ServerDirectory.NewFriend(Client.Username, addFriendJSON.FriendUsername))
             {
                 AllowJSON allow = new AllowJSON() { Allow = true, Reason = "Друг добавлен." };
                 string allowJSON = System.Text.Json.JsonSerializer.Serialize<AllowJSON>(allow);
-                Client.SendMessage(allowJSON);
+                Client.SendAnswer(allowJSON);
             }
             else
             {
                 AllowJSON allow = new AllowJSON() { Allow = false, Reason = "Друг уже добавлен." };
                 string allowJSON = System.Text.Json.JsonSerializer.Serialize<AllowJSON>(allow);
-                Client.SendMessage(allowJSON);
+                Client.SendAnswer(allowJSON);
             }
         }
         private void GetFriendList(GetFrindListJSON getFrindListJSON)
         {
             getFrindListJSON.FriendList = ServerDirectory.FriendList(Client.Username);
             string getFrindList = System.Text.Json.JsonSerializer.Serialize<GetFrindListJSON>(getFrindListJSON);
-            Client.SendMessage(getFrindList);
+            Client.SendAnswer(getFrindList);
         }
         private void GetChat(GetChatJSON getChatJSON)
         {
             getChatJSON.Chat = ServerDirectory.FindChat(Client.Username, getChatJSON.FriendUsername);
             string getChat = System.Text.Json.JsonSerializer.Serialize<GetChatJSON>(getChatJSON);
-            Client.SendMessage(getChat);
+            Client.SendAnswer(getChat);
         }
         private void SendMessage(SendMessageJSON sendMessageJSON)
         {
             ServerDirectory.SaveMessage(Client.Username, sendMessageJSON.FriendUsername, sendMessageJSON.Message);
+            string friendUsername = sendMessageJSON.FriendUsername;
+            sendMessageJSON.FriendUsername = Client.Username;
+            string answer = System.Text.Json.JsonSerializer.Serialize<SendMessageJSON>(sendMessageJSON);
+            Server.SendMessage(answer, friendUsername);
         }
         private void SendCodeEmail(string email, string username)
         {

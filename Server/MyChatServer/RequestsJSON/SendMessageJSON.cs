@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MyChatServer.RequestsJSON
 {
-    class SendMessageJSON
+    public class SendMessageJSON
     {
         public string Key { get; set; } = "sendmessage";
         public string FriendUsername { get; set; }

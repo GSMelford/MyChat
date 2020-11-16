@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -13,35 +14,50 @@ namespace MyChatClient
 {
     public partial class AuthorizationForm : Form
     {
-        private bool AllowAuthorization = false;
-        public RegistrationForm RegForm { get; }
-        public AuthorizationForm()
+        public RegistrationForm RegistrationForm { get; }
+        public bool RegistrationFormMain = false;
+        public AuthorizationForm(RegistrationForm registrationForm)
         {
             InitializeComponent();
+            RegistrationForm = registrationForm;
+            PasswordBox.UseSystemPasswordChar = true;
+#if DEBUG
+            UsernameOrEmailBox.Text = "GSMelford";
+            PasswordBox.Text = "ig4ghd87T%@4gsif39";
+#endif
         }
 
-        public AuthorizationForm(RegistrationForm regForm)
+        private void LoginButton_Click(object sender, EventArgs e)
         {
-            InitializeComponent();
-            RegForm = regForm;
-            EmailOrPassword_textBox.Text = "fedorenko.max163@gmail.com";
-            Password_textBox.Text = "228";
-        }
-
-        private void Login_button_Click(object sender, EventArgs e)
-        {
-            AllowAuthorization = CreateRequests.Authorization(EmailOrPassword_textBox.Text, Password_textBox.Text);
-            if(AllowAuthorization)
+            if (UsernameOrEmailBox.Text == string.Empty)
             {
-                ClientLogic.AllowMessenger = true;
-                RegForm.Close();
+                MessageBox.Show("Поле с ник неймом и электроной почтой должно быть заполнено.");
+                return;
+            }
+            else if (PasswordBox.Text == string.Empty)
+            {
+                MessageBox.Show("Поле с паролем должно быть заполнено. Придумайте сложный пароль, ведь это защита Вашего аккаунта.");
+                return;
+            }
+
+            if(CreateRequests.Authorization(UsernameOrEmailBox.Text, PasswordBox.Text))
+            {
+                ClientLogic.Registered = true;
+                this.Close();
             }
         }
 
-        private void Registration_label_Click(object sender, EventArgs e)
+        private void Registration_Click(object sender, EventArgs e)
         {
-            RegForm.Show();
             this.Close();
+        }
+
+        private void ShowPasswordCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ShowPasswordCheckBox.Checked == false)
+                PasswordBox.UseSystemPasswordChar = true;
+            else
+                PasswordBox.UseSystemPasswordChar = false;
         }
     }
 }

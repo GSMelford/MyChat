@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Threading;
 using System.IO;
+using MyChatClient.ServerAnswerJSON;
 
 namespace MyChatClient
 {
@@ -19,23 +20,30 @@ namespace MyChatClient
         public static string Email = string.Empty;
         public static string Password = string.Empty;
         public static string FriendUserNow = string.Empty;
+        public static bool Registered = false;
+        public static bool Authorization = false;
 
         private const string Host = "178.150.32.105";
         private const int Port = 1234;
+        private const int Port2 = 1235;
 
         static TcpClient Client;
-        static NetworkStream Stream;
-        static public Thread reciveThread;
-        public static bool AllowMessenger = false;
+        static TcpClient SubClient;
+        static NetworkStream StreamRequest;
+        static NetworkStream StreamAnswer;
+        static public MessengerForm messengerForm;
 
         public static List<Button> FriendList = new List<Button>();
-        public static bool ServerConnection()
+        public static bool ConnectToServer()
         {
             Client = new TcpClient();
+            SubClient = new TcpClient();
             try
             {
                 Client.Connect(Host, Port);
-                Stream = Client.GetStream();
+                SubClient.Connect(Host, Port2);
+                StreamRequest = Client.GetStream();
+                StreamAnswer = SubClient.GetStream();
                 return true;
             }
             catch (Exception )
@@ -50,26 +58,55 @@ namespace MyChatClient
             Int32 sizeRequests = data.Length;
             byte[] sizeRequestsByte = BitConverter.GetBytes(sizeRequests);
 
-            Stream.Write(sizeRequestsByte, 0, sizeRequestsByte.Length);
-            Stream.Write(data, 0, data.Length);
+            StreamRequest.Write(sizeRequestsByte, 0, sizeRequestsByte.Length);
+            StreamRequest.Write(data, 0, data.Length);
         }
-        public static void GetMessage()
+        public static string GetAnswer()
         {
             StringBuilder builder = new StringBuilder();
             int bytes = 0;
             byte[] sizeRequestsByte = new byte[4];
-            Stream.Read(sizeRequestsByte, 0, sizeRequestsByte.Length);
+            StreamRequest.Read(sizeRequestsByte, 0, sizeRequestsByte.Length);
             byte[] requestsByte = new byte[BitConverter.ToInt32(sizeRequestsByte, 0)];
-            bytes = Stream.Read(requestsByte, 0, BitConverter.ToInt32(sizeRequestsByte, 0));
+            bytes = StreamRequest.Read(requestsByte, 0, BitConverter.ToInt32(sizeRequestsByte, 0));
             builder.Append(Encoding.UTF8.GetString(requestsByte, 0, bytes));
-
+            return builder.ToString();
         }
+
+        public static void GetServerAnswer()
+        {
+            DistributorAnswer distributorAnswer = new DistributorAnswer(messengerForm);
+            while (true)
+            {
+                try
+                {
+                    StringBuilder builder = new StringBuilder();
+                    int bytes = 0;
+                    byte[] sizeRequestsByte = new byte[4];
+                    StreamAnswer.Read(sizeRequestsByte, 0, sizeRequestsByte.Length);
+                    byte[] requestsByte = new byte[BitConverter.ToInt32(sizeRequestsByte, 0)];
+                    bytes = StreamAnswer.Read(requestsByte, 0, BitConverter.ToInt32(sizeRequestsByte, 0));
+                    builder.Append(Encoding.UTF8.GetString(requestsByte, 0, bytes));
+                    distributorAnswer.AnswerActivation(builder.ToString());
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Что-то пошло не так с GetServerAnswer();");
+                    break;
+                }
+            }
+        }
+
         static void Disconnect()
         {
-            if (Stream != null)
-                Stream.Close();
+            if (StreamRequest != null)
+                StreamRequest.Close();
+            if (StreamAnswer != null)
+                StreamAnswer.Close();
             if (Client != null)
                 Client.Close();
+            if (SubClient != null)
+                SubClient.Close();
         }
     }
 }

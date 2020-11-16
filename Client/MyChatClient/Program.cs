@@ -17,10 +17,7 @@ namespace MyChatClient
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new RegistrationForm());
-
-            if(ClientLogic.AllowMessenger)
-                Application.Run(new MessengerForm());
+            Application.Run(new MessengerForm());
         }
     }
 }

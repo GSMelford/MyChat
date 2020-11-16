@@ -28,103 +28,114 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.Password_textBox = new System.Windows.Forms.TextBox();
-            this.EmailOrPassword_textBox = new System.Windows.Forms.TextBox();
-            this.UsernameOrEmail_label = new System.Windows.Forms.Label();
-            this.Password_label = new System.Windows.Forms.Label();
-            this.Login_label = new System.Windows.Forms.Label();
-            this.ShowPassword_checkBoz = new System.Windows.Forms.CheckBox();
-            this.Login_button = new System.Windows.Forms.Button();
-            this.Registration_label = new System.Windows.Forms.Label();
+            this.PasswordBox = new System.Windows.Forms.TextBox();
+            this.UsernameOrEmailBox = new System.Windows.Forms.TextBox();
+            this.UsernameOrEmail = new System.Windows.Forms.Label();
+            this.Password = new System.Windows.Forms.Label();
+            this.Login = new System.Windows.Forms.Label();
+            this.ShowPasswordCheckBox = new System.Windows.Forms.CheckBox();
+            this.LoginButton = new System.Windows.Forms.Button();
+            this.Registration = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // Password_textBox
+            // PasswordBox
             // 
-            this.Password_textBox.Location = new System.Drawing.Point(32, 156);
-            this.Password_textBox.Name = "Password_textBox";
-            this.Password_textBox.Size = new System.Drawing.Size(210, 29);
-            this.Password_textBox.TabIndex = 0;
+            this.PasswordBox.Location = new System.Drawing.Point(32, 156);
+            this.PasswordBox.Name = "PasswordBox";
+            this.PasswordBox.Size = new System.Drawing.Size(235, 29);
+            this.PasswordBox.TabIndex = 1;
             // 
-            // EmailOrPassword_textBox
+            // UsernameOrEmailBox
             // 
-            this.EmailOrPassword_textBox.Location = new System.Drawing.Point(32, 99);
-            this.EmailOrPassword_textBox.Name = "EmailOrPassword_textBox";
-            this.EmailOrPassword_textBox.Size = new System.Drawing.Size(320, 29);
-            this.EmailOrPassword_textBox.TabIndex = 1;
+            this.UsernameOrEmailBox.Location = new System.Drawing.Point(32, 99);
+            this.UsernameOrEmailBox.Name = "UsernameOrEmailBox";
+            this.UsernameOrEmailBox.Size = new System.Drawing.Size(343, 29);
+            this.UsernameOrEmailBox.TabIndex = 0;
             // 
-            // UsernameOrEmail_label
+            // UsernameOrEmail
             // 
-            this.UsernameOrEmail_label.AutoSize = true;
-            this.UsernameOrEmail_label.Location = new System.Drawing.Point(28, 74);
-            this.UsernameOrEmail_label.Name = "UsernameOrEmail_label";
-            this.UsernameOrEmail_label.Size = new System.Drawing.Size(347, 22);
-            this.UsernameOrEmail_label.TabIndex = 2;
-            this.UsernameOrEmail_label.Text = "Введите электроную почту или никнейм:";
+            this.UsernameOrEmail.AutoSize = true;
+            this.UsernameOrEmail.ForeColor = System.Drawing.Color.White;
+            this.UsernameOrEmail.Location = new System.Drawing.Point(28, 74);
+            this.UsernameOrEmail.Name = "UsernameOrEmail";
+            this.UsernameOrEmail.Size = new System.Drawing.Size(347, 22);
+            this.UsernameOrEmail.TabIndex = 2;
+            this.UsernameOrEmail.Text = "Введите электроную почту или никнейм:";
             // 
-            // Password_label
+            // Password
             // 
-            this.Password_label.AutoSize = true;
-            this.Password_label.Location = new System.Drawing.Point(29, 131);
-            this.Password_label.Name = "Password_label";
-            this.Password_label.Size = new System.Drawing.Size(145, 22);
-            this.Password_label.TabIndex = 3;
-            this.Password_label.Text = "Введите пароль:";
+            this.Password.AutoSize = true;
+            this.Password.ForeColor = System.Drawing.Color.White;
+            this.Password.Location = new System.Drawing.Point(29, 131);
+            this.Password.Name = "Password";
+            this.Password.Size = new System.Drawing.Size(145, 22);
+            this.Password.TabIndex = 3;
+            this.Password.Text = "Введите пароль:";
             // 
-            // Login_label
+            // Login
             // 
-            this.Login_label.AutoSize = true;
-            this.Login_label.Location = new System.Drawing.Point(125, 32);
-            this.Login_label.Name = "Login_label";
-            this.Login_label.Size = new System.Drawing.Size(142, 22);
-            this.Login_label.TabIndex = 4;
-            this.Login_label.Text = "Авторизоваться";
+            this.Login.AutoSize = true;
+            this.Login.ForeColor = System.Drawing.Color.White;
+            this.Login.Location = new System.Drawing.Point(125, 32);
+            this.Login.Name = "Login";
+            this.Login.Size = new System.Drawing.Size(142, 22);
+            this.Login.TabIndex = 4;
+            this.Login.Text = "Авторизоваться";
             // 
-            // ShowPassword_checkBoz
+            // ShowPasswordCheckBox
             // 
-            this.ShowPassword_checkBoz.AutoSize = true;
-            this.ShowPassword_checkBoz.Location = new System.Drawing.Point(250, 158);
-            this.ShowPassword_checkBoz.Name = "ShowPassword_checkBoz";
-            this.ShowPassword_checkBoz.Size = new System.Drawing.Size(102, 26);
-            this.ShowPassword_checkBoz.TabIndex = 6;
-            this.ShowPassword_checkBoz.Text = "показать";
-            this.ShowPassword_checkBoz.UseVisualStyleBackColor = true;
+            this.ShowPasswordCheckBox.AutoSize = true;
+            this.ShowPasswordCheckBox.ForeColor = System.Drawing.Color.White;
+            this.ShowPasswordCheckBox.Location = new System.Drawing.Point(273, 159);
+            this.ShowPasswordCheckBox.Name = "ShowPasswordCheckBox";
+            this.ShowPasswordCheckBox.Size = new System.Drawing.Size(102, 26);
+            this.ShowPasswordCheckBox.TabIndex = 6;
+            this.ShowPasswordCheckBox.Text = "показать";
+            this.ShowPasswordCheckBox.UseVisualStyleBackColor = true;
+            this.ShowPasswordCheckBox.CheckedChanged += new System.EventHandler(this.ShowPasswordCheckBox_CheckedChanged);
             // 
-            // Login_button
+            // LoginButton
             // 
-            this.Login_button.Location = new System.Drawing.Point(32, 191);
-            this.Login_button.Name = "Login_button";
-            this.Login_button.Size = new System.Drawing.Size(320, 64);
-            this.Login_button.TabIndex = 7;
-            this.Login_button.Text = "Авторизоваться";
-            this.Login_button.UseVisualStyleBackColor = true;
-            this.Login_button.Click += new System.EventHandler(this.Login_button_Click);
+            this.LoginButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.LoginButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.LoginButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.LoginButton.ForeColor = System.Drawing.Color.White;
+            this.LoginButton.Location = new System.Drawing.Point(32, 200);
+            this.LoginButton.Name = "LoginButton";
+            this.LoginButton.Size = new System.Drawing.Size(343, 64);
+            this.LoginButton.TabIndex = 2;
+            this.LoginButton.Text = "Авторизоваться";
+            this.LoginButton.UseVisualStyleBackColor = false;
+            this.LoginButton.Click += new System.EventHandler(this.LoginButton_Click);
             // 
-            // Registration_label
+            // Registration
             // 
-            this.Registration_label.AutoSize = true;
-            this.Registration_label.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.Registration_label.Font = new System.Drawing.Font("Open Sans SemiBold", 12F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Registration_label.ForeColor = System.Drawing.Color.Blue;
-            this.Registration_label.Location = new System.Drawing.Point(9, 274);
-            this.Registration_label.Name = "Registration_label";
-            this.Registration_label.Size = new System.Drawing.Size(383, 22);
-            this.Registration_label.TabIndex = 12;
-            this.Registration_label.Text = "Я уже зарегистрирован, хочу авторизоваться.";
-            this.Registration_label.Click += new System.EventHandler(this.Registration_label_Click);
+            this.Registration.AutoSize = true;
+            this.Registration.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Registration.Font = new System.Drawing.Font("Open Sans SemiBold", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Registration.ForeColor = System.Drawing.Color.CornflowerBlue;
+            this.Registration.Location = new System.Drawing.Point(137, 276);
+            this.Registration.Name = "Registration";
+            this.Registration.Size = new System.Drawing.Size(116, 17);
+            this.Registration.TabIndex = 12;
+            this.Registration.Text = "Регистрироваться";
+            this.Registration.Click += new System.EventHandler(this.Registration_Click);
             // 
             // AuthorizationForm
             // 
+            this.AcceptButton = this.LoginButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(404, 330);
-            this.Controls.Add(this.Registration_label);
-            this.Controls.Add(this.Login_button);
-            this.Controls.Add(this.ShowPassword_checkBoz);
-            this.Controls.Add(this.Login_label);
-            this.Controls.Add(this.Password_label);
-            this.Controls.Add(this.UsernameOrEmail_label);
-            this.Controls.Add(this.EmailOrPassword_textBox);
-            this.Controls.Add(this.Password_textBox);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.ClientSize = new System.Drawing.Size(404, 310);
+            this.Controls.Add(this.Registration);
+            this.Controls.Add(this.LoginButton);
+            this.Controls.Add(this.ShowPasswordCheckBox);
+            this.Controls.Add(this.Login);
+            this.Controls.Add(this.Password);
+            this.Controls.Add(this.UsernameOrEmail);
+            this.Controls.Add(this.UsernameOrEmailBox);
+            this.Controls.Add(this.PasswordBox);
             this.Font = new System.Drawing.Font("Open Sans SemiBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.Name = "AuthorizationForm";
@@ -136,13 +147,13 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox Password_textBox;
-        private System.Windows.Forms.TextBox EmailOrPassword_textBox;
-        private System.Windows.Forms.Label UsernameOrEmail_label;
-        private System.Windows.Forms.Label Password_label;
-        private System.Windows.Forms.Label Login_label;
-        private System.Windows.Forms.CheckBox ShowPassword_checkBoz;
-        private System.Windows.Forms.Button Login_button;
-        private System.Windows.Forms.Label Registration_label;
+        private System.Windows.Forms.TextBox PasswordBox;
+        private System.Windows.Forms.TextBox UsernameOrEmailBox;
+        private System.Windows.Forms.Label UsernameOrEmail;
+        private System.Windows.Forms.Label Password;
+        private System.Windows.Forms.Label Login;
+        private System.Windows.Forms.CheckBox ShowPasswordCheckBox;
+        private System.Windows.Forms.Button LoginButton;
+        private System.Windows.Forms.Label Registration;
     }
 }

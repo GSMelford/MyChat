@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -18,26 +19,48 @@ namespace MyChatClient
         public MessengerForm()
         {
             InitializeComponent();
-        }
-        private void AddFriend_button_Click(object sender, EventArgs e)
-        {
-            CreateRequests.AddFriend(FriendUsername_textBox.Text);
+            if (!ClientLogic.ConnectToServer())
+            {
+                MessageBox.Show("Подключение к серверу отсутствует.");
+                Environment.Exit(0);
+            }
+
+            if (ClientDirectory.LocalAuthorization())
+            {
+                ClientLogic.Registered = true;
+                if(!CreateRequests.Authorization(ClientLogic.Email, ClientLogic.Password))
+                {
+                    RegistrationForm registrationForm = new RegistrationForm(this);
+                    this.Hide();
+                    registrationForm.ShowDialog();
+                }
+            }
+            else
+            {
+                RegistrationForm registrationForm = new RegistrationForm(this);
+                this.Hide();
+                registrationForm.ShowDialog();
+            }
+            UsernameLable.Text = ClientLogic.Username;
+            ClientLogic.messengerForm = this;
+            Task receive = new Task(()=> { ClientLogic.GetServerAnswer();});
+            receive.Start();
         }
         private void FriendButton_Click(object sender, EventArgs e)
         {
             string FriendUsername = (sender as Button).Tag.ToString();
-            Chat_textBox.Text = CreateRequests.GetChat(FriendUsername);
-        }
-        private void RefreshList_button_Click(object sender, EventArgs e)
-        {
-            List<string> ListFriend = CreateRequests.GetFriendList();
-            RefreshFriendsToList(ListFriend);
+            ClientLogic.FriendUserNow = FriendUsername;
+            ChatMessageBox.Text = CreateRequests.GetChat(FriendUsername);
+            FriendUsernameLable.Text = FriendUsername;
+            SendButton.Enabled = true;
+            SendMessageBox.Enabled = true;
         }
         public void RefreshFriendsToList(List<string> FriendListServer)
         {
+            CounterFButton = 0;
             foreach (var button in ClientLogic.FriendList)
             {
-                FriendList_container.Controls.Remove(button);
+                FriendListContainer.Controls.Remove(button);
             }
             foreach (var button in FriendListServer)
             {
@@ -49,18 +72,37 @@ namespace MyChatClient
                 FriendButton.Tag = button;
                 FriendButton.Text = button;
                 ClientLogic.FriendList.Add(FriendButton);
-                FriendList_container.Controls.Add(FriendButton);
+                FriendListContainer.Controls.Add(FriendButton);
                 FriendButton.Click += new System.EventHandler(this.FriendButton_Click);
             }
         }
         private void MessengerForm_Load(object sender, EventArgs e)
         {
-            List<string> ListFriend = CreateRequests.GetFriendList();
-            RefreshFriendsToList(ListFriend);
+            RefreshFriendsToList(CreateRequests.GetFriendList());
         }
-        private void Send_button_Click(object sender, EventArgs e)
+        private void AddFriendButton_Click(object sender, EventArgs e)
         {
-            CreateRequests.SendMessage(ClientLogic.FriendUserNow, Message_textBox.Text);
+            if(FriendUsernameBox.Text == string.Empty)
+            {
+                MessageBox.Show("Введите имя друга в сотвественую форму.");
+                return;
+            }
+            if(CreateRequests.AddFriend(FriendUsernameBox.Text))
+            {
+                RefreshFriendsToList(CreateRequests.GetFriendList());
+            }
         }
+        private void SendButton_Click(object sender, EventArgs e)
+        {
+            if(SendMessageBox.Text != string.Empty)
+            {
+                CreateRequests.SendMessage(FriendUsernameLable.Text, SendMessageBox.Text);
+                ChatMessageBox.Text += SendMessageBox.Text + '\n' + '\r';
+                SendMessageBox.Clear();
+            }
+        }
+
+        public Label GetFriendUsername() => FriendUsernameLable;
+        public TextBox GetChat() => ChatMessageBox;
     }
 }

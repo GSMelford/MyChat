@@ -13,17 +13,20 @@ namespace MyChatServer
         public string Email;
         public string Password;
         public int EmailCode;
-        protected internal NetworkStream Stream { get; private set; }
-        protected internal StreamWriter streamWriter { get; private set; }
-        ServerObject serverObject;
-        TcpClient tcpClient;
-        
-        public ClientObject(TcpClient tcpClient, ServerObject serverObject)
+        protected internal NetworkStream StreamRequest { get; private set; }
+        protected internal NetworkStream StreamSend { get; private set; }
+        ServerObject Server;
+        TcpClient TcpMainClient;
+        TcpClient TcpSubClient;
+
+
+        public ClientObject(TcpClient tcpMainClient, TcpClient tcpSubClient, ServerObject server)
         {
             Id = Guid.NewGuid().ToString();
-            this.tcpClient = tcpClient;
-            this.serverObject = serverObject;
-            serverObject.AddConnection(this);
+            this.TcpMainClient = tcpMainClient;
+            this.TcpSubClient = tcpSubClient;
+            this.Server = server;
+            server.AddConnection(this);
             Console.WriteLine($"Client ID: {Id}. Unknown connection.");
         }
         public void SetDataUser(string username, string email, string password)
@@ -36,12 +39,13 @@ namespace MyChatServer
         {
             try
             {
-                Stream = tcpClient.GetStream();
-                streamWriter = new StreamWriter(Stream);
-                DistributorRequests distributorRequests = new DistributorRequests(this, serverObject);
+                StreamRequest = TcpMainClient.GetStream();
+                StreamSend = TcpSubClient.GetStream();
+
+                DistributorRequests distributorRequests = new DistributorRequests(this, Server);
                 while (true)
                 {
-                    distributorRequests.RequestActivation(serverObject.GetMessage(Id));
+                    distributorRequests.RequestActivation(Server.GetRequest(Id));
                 }
             }
             catch (Exception)
@@ -50,27 +54,31 @@ namespace MyChatServer
             }
             finally
             {
-                serverObject.RemoveConnection(this.Id);
+                Server.RemoveConnection(this.Id);
                 Close();
             }
         }
-        protected internal void SendMessage(string json)
+        protected internal void SendAnswer(string json)
         {
             byte[] data = Encoding.UTF8.GetBytes(json);
 
             Int32 sizeRequests = data.Length;
             byte[] sizeRequestsByte = BitConverter.GetBytes(sizeRequests);
 
-            Stream.Write(sizeRequestsByte, 0, sizeRequestsByte.Length);
-            Stream.Write(data, 0, data.Length);
+            StreamRequest.Write(sizeRequestsByte, 0, sizeRequestsByte.Length);
+            StreamRequest.Write(data, 0, data.Length);
         }
         
         protected internal void Close()
         {
-            if (Stream != null)
-                Stream.Close();
-            if (tcpClient != null)
-                tcpClient.Close();
+            if (StreamRequest != null)
+                StreamRequest.Close();
+            if (StreamSend != null)
+                StreamSend.Close();
+            if (TcpMainClient != null)
+                TcpMainClient.Close();
+            if (TcpSubClient != null)
+                TcpSubClient.Close();
         }
     }
 }

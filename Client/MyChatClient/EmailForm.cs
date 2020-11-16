@@ -15,37 +15,26 @@ namespace MyChatClient
 {
     public partial class EmailForm : Form
     {
-        RegistrationForm RegForm;
         public EmailForm()
         {
             InitializeComponent();
         }
 
-        public EmailForm(RegistrationForm registrationForm)
-        {
-            InitializeComponent();
-            RegForm = registrationForm;
-            RegForm.Hide();
-        }
-
         private void SendEmail_button_Click(object sender, EventArgs e)
         {
-            int number;
-            if (!int.TryParse(CodeEmail_textBox.Text, out number))
+            int code;
+            if (!int.TryParse(EmailCodeBox.Text, out code))
             {
                 MessageBox.Show("Некорректный ввод! Попробуйте ещё раз.");
-                CodeEmail_textBox.Clear();
+                EmailCodeBox.Clear();
             }
             else
             {
-                if (RegForm.RequestsEmailCode(number))
+                if(CreateRequests.EmailConfirmation(code))
                 {
-                    AuthorizationForm authorizationForm = new AuthorizationForm(RegForm);
-                    authorizationForm.Show();
+                    ClientLogic.Registered = true;
                     this.Close();
                 }
-                else
-                    CodeEmail_textBox.Clear();
             }
         }
     }

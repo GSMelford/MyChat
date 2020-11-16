@@ -78,7 +78,7 @@
     <Compile Include="RequestsJSON\AuthorizationJSON.cs" />
     <Compile Include="RequestsJSON\DistributorRequests.cs" />
     <Compile Include="RequestsJSON\AllowJSON.cs" />
-    <Compile Include="RequestsJSON\EmailCheackJSON.cs" />
+    <Compile Include="RequestsJSON\EmailConfirmationJSON.cs" />
     <Compile Include="RequestsJSON\GetChatJSON.cs" />
     <Compile Include="RequestsJSON\GetFrindListJSON.cs" />
     <Compile Include="RequestsJSON\RegistrationJSON.cs" />

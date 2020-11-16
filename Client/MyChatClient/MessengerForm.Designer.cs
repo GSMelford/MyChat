@@ -28,91 +28,128 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.FriendList_container = new System.Windows.Forms.Panel();
-            this.Chat_textBox = new System.Windows.Forms.TextBox();
-            this.Message_textBox = new System.Windows.Forms.TextBox();
-            this.AddFriend_button = new System.Windows.Forms.Button();
-            this.FriendUsername_textBox = new System.Windows.Forms.TextBox();
-            this.Send_button = new System.Windows.Forms.Button();
-            this.RefreshList_button = new System.Windows.Forms.Button();
+            this.FriendListContainer = new System.Windows.Forms.Panel();
+            this.ChatMessageBox = new System.Windows.Forms.TextBox();
+            this.SendMessageBox = new System.Windows.Forms.TextBox();
+            this.AddFriendButton = new System.Windows.Forms.Button();
+            this.FriendUsernameBox = new System.Windows.Forms.TextBox();
+            this.SendButton = new System.Windows.Forms.Button();
+            this.FriendListLabel = new System.Windows.Forms.Label();
+            this.UsernameLable = new System.Windows.Forms.Label();
+            this.FriendUsernameLable = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // FriendList_container
+            // FriendListContainer
             // 
-            this.FriendList_container.AutoScroll = true;
-            this.FriendList_container.Location = new System.Drawing.Point(12, 65);
-            this.FriendList_container.Name = "FriendList_container";
-            this.FriendList_container.Size = new System.Drawing.Size(200, 270);
-            this.FriendList_container.TabIndex = 0;
+            this.FriendListContainer.AutoScroll = true;
+            this.FriendListContainer.Location = new System.Drawing.Point(20, 110);
+            this.FriendListContainer.Margin = new System.Windows.Forms.Padding(5);
+            this.FriendListContainer.Name = "FriendListContainer";
+            this.FriendListContainer.Size = new System.Drawing.Size(333, 457);
+            this.FriendListContainer.TabIndex = 0;
             // 
-            // Chat_textBox
+            // ChatMessageBox
             // 
-            this.Chat_textBox.Location = new System.Drawing.Point(218, 38);
-            this.Chat_textBox.Multiline = true;
-            this.Chat_textBox.Name = "Chat_textBox";
-            this.Chat_textBox.Size = new System.Drawing.Size(570, 348);
-            this.Chat_textBox.TabIndex = 1;
+            this.ChatMessageBox.Location = new System.Drawing.Point(363, 64);
+            this.ChatMessageBox.Margin = new System.Windows.Forms.Padding(5);
+            this.ChatMessageBox.Multiline = true;
+            this.ChatMessageBox.Name = "ChatMessageBox";
+            this.ChatMessageBox.ReadOnly = true;
+            this.ChatMessageBox.Size = new System.Drawing.Size(947, 586);
+            this.ChatMessageBox.TabIndex = 1;
             // 
-            // Message_textBox
+            // SendMessageBox
             // 
-            this.Message_textBox.Location = new System.Drawing.Point(218, 393);
-            this.Message_textBox.Multiline = true;
-            this.Message_textBox.Name = "Message_textBox";
-            this.Message_textBox.Size = new System.Drawing.Size(495, 45);
-            this.Message_textBox.TabIndex = 2;
+            this.SendMessageBox.Enabled = false;
+            this.SendMessageBox.Location = new System.Drawing.Point(363, 665);
+            this.SendMessageBox.Margin = new System.Windows.Forms.Padding(5);
+            this.SendMessageBox.Multiline = true;
+            this.SendMessageBox.Name = "SendMessageBox";
+            this.SendMessageBox.Size = new System.Drawing.Size(822, 73);
+            this.SendMessageBox.TabIndex = 2;
             // 
-            // AddFriend_button
+            // AddFriendButton
             // 
-            this.AddFriend_button.Location = new System.Drawing.Point(12, 393);
-            this.AddFriend_button.Name = "AddFriend_button";
-            this.AddFriend_button.Size = new System.Drawing.Size(200, 45);
-            this.AddFriend_button.TabIndex = 3;
-            this.AddFriend_button.Text = "Add";
-            this.AddFriend_button.UseVisualStyleBackColor = true;
-            this.AddFriend_button.Click += new System.EventHandler(this.AddFriend_button_Click);
+            this.AddFriendButton.Location = new System.Drawing.Point(20, 665);
+            this.AddFriendButton.Margin = new System.Windows.Forms.Padding(5);
+            this.AddFriendButton.Name = "AddFriendButton";
+            this.AddFriendButton.Size = new System.Drawing.Size(333, 76);
+            this.AddFriendButton.TabIndex = 3;
+            this.AddFriendButton.Text = "Добавить друга";
+            this.AddFriendButton.UseVisualStyleBackColor = true;
+            this.AddFriendButton.Click += new System.EventHandler(this.AddFriendButton_Click);
             // 
-            // FriendUsername_textBox
+            // FriendUsernameBox
             // 
-            this.FriendUsername_textBox.Location = new System.Drawing.Point(12, 341);
-            this.FriendUsername_textBox.Multiline = true;
-            this.FriendUsername_textBox.Name = "FriendUsername_textBox";
-            this.FriendUsername_textBox.Size = new System.Drawing.Size(200, 45);
-            this.FriendUsername_textBox.TabIndex = 4;
+            this.FriendUsernameBox.Location = new System.Drawing.Point(20, 577);
+            this.FriendUsernameBox.Margin = new System.Windows.Forms.Padding(5);
+            this.FriendUsernameBox.Multiline = true;
+            this.FriendUsernameBox.Name = "FriendUsernameBox";
+            this.FriendUsernameBox.Size = new System.Drawing.Size(331, 73);
+            this.FriendUsernameBox.TabIndex = 4;
             // 
-            // Send_button
+            // SendButton
             // 
-            this.Send_button.Location = new System.Drawing.Point(719, 392);
-            this.Send_button.Name = "Send_button";
-            this.Send_button.Size = new System.Drawing.Size(69, 45);
-            this.Send_button.TabIndex = 5;
-            this.Send_button.Text = "Send";
-            this.Send_button.UseVisualStyleBackColor = true;
-            this.Send_button.Click += new System.EventHandler(this.Send_button_Click);
+            this.SendButton.Enabled = false;
+            this.SendButton.Location = new System.Drawing.Point(1198, 663);
+            this.SendButton.Margin = new System.Windows.Forms.Padding(5);
+            this.SendButton.Name = "SendButton";
+            this.SendButton.Size = new System.Drawing.Size(115, 76);
+            this.SendButton.TabIndex = 5;
+            this.SendButton.Text = "Отправить";
+            this.SendButton.UseVisualStyleBackColor = true;
+            this.SendButton.Click += new System.EventHandler(this.SendButton_Click);
             // 
-            // RefreshList_button
+            // FriendListLabel
             // 
-            this.RefreshList_button.Location = new System.Drawing.Point(188, 36);
-            this.RefreshList_button.Name = "RefreshList_button";
-            this.RefreshList_button.Size = new System.Drawing.Size(24, 23);
-            this.RefreshList_button.TabIndex = 6;
-            this.RefreshList_button.Text = "R";
-            this.RefreshList_button.UseVisualStyleBackColor = true;
-            this.RefreshList_button.Click += new System.EventHandler(this.RefreshList_button_Click);
+            this.FriendListLabel.AutoSize = true;
+            this.FriendListLabel.Font = new System.Drawing.Font("Open Sans SemiBold", 16F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.FriendListLabel.Location = new System.Drawing.Point(20, 75);
+            this.FriendListLabel.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.FriendListLabel.Name = "FriendListLabel";
+            this.FriendListLabel.Size = new System.Drawing.Size(184, 30);
+            this.FriendListLabel.TabIndex = 7;
+            this.FriendListLabel.Text = "Список друзей:";
+            // 
+            // UsernameLable
+            // 
+            this.UsernameLable.AutoSize = true;
+            this.UsernameLable.Font = new System.Drawing.Font("Open Sans SemiBold", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.UsernameLable.Location = new System.Drawing.Point(12, 9);
+            this.UsernameLable.Name = "UsernameLable";
+            this.UsernameLable.Size = new System.Drawing.Size(185, 43);
+            this.UsernameLable.TabIndex = 8;
+            this.UsernameLable.Text = "YourName";
+            // 
+            // FriendUsernameLable
+            // 
+            this.FriendUsernameLable.AutoSize = true;
+            this.FriendUsernameLable.Font = new System.Drawing.Font("Open Sans SemiBold", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.FriendUsernameLable.Location = new System.Drawing.Point(355, 9);
+            this.FriendUsernameLable.Name = "FriendUsernameLable";
+            this.FriendUsernameLable.Size = new System.Drawing.Size(210, 43);
+            this.FriendUsernameLable.TabIndex = 9;
+            this.FriendUsernameLable.Text = "FriendName";
             // 
             // MessengerForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AcceptButton = this.SendButton;
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.RefreshList_button);
-            this.Controls.Add(this.Send_button);
-            this.Controls.Add(this.FriendUsername_textBox);
-            this.Controls.Add(this.AddFriend_button);
-            this.Controls.Add(this.Message_textBox);
-            this.Controls.Add(this.Chat_textBox);
-            this.Controls.Add(this.FriendList_container);
+            this.ClientSize = new System.Drawing.Size(1333, 762);
+            this.Controls.Add(this.FriendUsernameLable);
+            this.Controls.Add(this.UsernameLable);
+            this.Controls.Add(this.FriendListLabel);
+            this.Controls.Add(this.SendButton);
+            this.Controls.Add(this.FriendUsernameBox);
+            this.Controls.Add(this.AddFriendButton);
+            this.Controls.Add(this.SendMessageBox);
+            this.Controls.Add(this.ChatMessageBox);
+            this.Controls.Add(this.FriendListContainer);
+            this.Font = new System.Drawing.Font("Open Sans SemiBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "MessengerForm";
-            this.Text = "MessengerForm";
+            this.Text = "MyChat";
             this.Load += new System.EventHandler(this.MessengerForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -121,12 +158,14 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel FriendList_container;
-        private System.Windows.Forms.TextBox Chat_textBox;
-        private System.Windows.Forms.TextBox Message_textBox;
-        private System.Windows.Forms.Button AddFriend_button;
-        private System.Windows.Forms.TextBox FriendUsername_textBox;
-        private System.Windows.Forms.Button Send_button;
-        private System.Windows.Forms.Button RefreshList_button;
+        private System.Windows.Forms.Panel FriendListContainer;
+        private System.Windows.Forms.TextBox ChatMessageBox;
+        private System.Windows.Forms.TextBox SendMessageBox;
+        private System.Windows.Forms.Button AddFriendButton;
+        private System.Windows.Forms.TextBox FriendUsernameBox;
+        private System.Windows.Forms.Button SendButton;
+        private System.Windows.Forms.Label FriendListLabel;
+        private System.Windows.Forms.Label UsernameLable;
+        private System.Windows.Forms.Label FriendUsernameLable;
     }
 }

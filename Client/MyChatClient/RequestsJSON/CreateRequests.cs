@@ -14,11 +14,10 @@ namespace MyChatClient.RequestsJSON
         {
             try
             {
-                //Создание JSON файла с данными пользователя
                 RegistrationJSON registrationJSON = new RegistrationJSON { Username = username, Email = email, Password = password };
                 string requestJSON = JsonSerializer.Serialize<RegistrationJSON>(registrationJSON);
                 ClientLogic.SendMessage(requestJSON);
-                return AllowServer(ClientLogic.GetMessage());
+                return AllowServer(ClientLogic.GetAnswer());
             }
             catch (Exception)
             {
@@ -26,42 +25,35 @@ namespace MyChatClient.RequestsJSON
             }
             return false;
         }
+        public static bool EmailConfirmation(int code)
+        {
+            EmailConfirmationJSON emailConfirmationJSON = new EmailConfirmationJSON { Code = code };
+            string requestJSON2 = JsonSerializer.Serialize<EmailConfirmationJSON>(emailConfirmationJSON);
+            ClientLogic.SendMessage(requestJSON2);
+
+            return AllowServer(ClientLogic.GetAnswer());
+        }
         public static bool Authorization(string usernameOrEmail, string password)
         {
             AuthorizationJSON authorizationJSON = new AuthorizationJSON { UsernameOrEmail = usernameOrEmail, Password = password };
             string requestJSON = JsonSerializer.Serialize<AuthorizationJSON>(authorizationJSON);
             ClientLogic.SendMessage(requestJSON);
-            return AllowServer(ClientLogic.GetMessage());
+            return AllowServer(ClientLogic.GetAnswer());
         }
         public static bool AddFriend(string friendUsername)
         {
             AddFriendJSON addFriendJSON = new AddFriendJSON { FriendUsername = friendUsername };
             string requestJSON = JsonSerializer.Serialize<AddFriendJSON>(addFriendJSON);
             ClientLogic.SendMessage(requestJSON);
-            return AllowServer(ClientLogic.GetMessage());
+            return AllowServer(ClientLogic.GetAnswer());
         }
         public static List<string> GetFriendList()
         {
             GetFrindListJSON getFrindListJSON = new GetFrindListJSON();
             string requestJSON = JsonSerializer.Serialize<GetFrindListJSON>(getFrindListJSON);
             ClientLogic.SendMessage(requestJSON);
-            getFrindListJSON = JsonSerializer.Deserialize<GetFrindListJSON>(ClientLogic.GetMessage());
+            getFrindListJSON = JsonSerializer.Deserialize<GetFrindListJSON>(ClientLogic.GetAnswer());
             return getFrindListJSON.FriendList;
-        }
-        public static bool EmailCheack(int code)
-        {
-            try
-            {
-                EmailCheackJSON emailCheackJSON = new EmailCheackJSON { Code = code };
-                string requestJSON2 = JsonSerializer.Serialize<EmailCheackJSON>(emailCheackJSON);
-                ClientLogic.SendMessage(requestJSON2);
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Error");
-            }
-            
-            return AllowServer(ClientLogic.GetMessage());
         }
         public static string GetChat(string friendUsername)
         {
@@ -69,7 +61,7 @@ namespace MyChatClient.RequestsJSON
             GetChatJSON getChatJSON = new GetChatJSON { FriendUsername = friendUsername };
             string requestJSON = JsonSerializer.Serialize<GetChatJSON>(getChatJSON);
             ClientLogic.SendMessage(requestJSON);
-            getChatJSON = JsonSerializer.Deserialize<GetChatJSON>(ClientLogic.GetMessage());
+            getChatJSON = JsonSerializer.Deserialize<GetChatJSON>(ClientLogic.GetAnswer());
             return getChatJSON.Chat;
         }
         public static void SendMessage(string friendUsername, string message)
@@ -81,7 +73,8 @@ namespace MyChatClient.RequestsJSON
         public static bool AllowServer(string json)
         {
             AllowJSON allowJSON = JsonSerializer.Deserialize<AllowJSON>(json);
-            MessageBox.Show(allowJSON.Reason);
+            if(!allowJSON.Allow)
+                MessageBox.Show(allowJSON.Reason);
             return allowJSON.Allow;
         }
     }
