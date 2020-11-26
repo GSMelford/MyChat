@@ -41,23 +41,30 @@ namespace MyChatServer
         }
         public static void CreatePersonalCatalog(string username, string email, string password)
         {
-            string catalogPath = @"Users\" + username;
-            DirectoryInfo userCatalog = new DirectoryInfo(catalogPath);
-            if(!userCatalog.Exists)
+            try
             {
-                userCatalog.Create();
-                Console.WriteLine($"Catalog create. User: {username}");
+                string catalogPath = @"Users\" + username;
+                DirectoryInfo userCatalog = new DirectoryInfo(catalogPath);
+                if (!userCatalog.Exists)
+                {
+                    userCatalog.Create();
+                    Console.WriteLine($"Catalog create. User: {username}");
+                }
+
+                string filePath = catalogPath + @"\" + username + @".txt";
+
+                using (StreamWriter sw = new StreamWriter(filePath, true, Encoding.UTF8))
+                {
+                    sw.WriteLine(username);
+                    sw.WriteLine(email);
+                    sw.WriteLine(password);
+                    sw.Close();
+                    sw.Dispose();
+                }
             }
-
-            string filePath = catalogPath + @"\" + username + @".txt";
-
-            using (StreamWriter sw = new StreamWriter(filePath, true, Encoding.UTF8))
+            catch (Exception)
             {
-                sw.WriteLine(username);
-                sw.WriteLine(email);
-                sw.WriteLine(password);
-                sw.Close();
-                sw.Dispose();
+                Console.WriteLine("CreatePersonalCatalog() Error.");
             }
         }
         public static bool NewFriend(string myUsername, string friendUsername)
@@ -66,59 +73,72 @@ namespace MyChatServer
             string friendPath = @"Users\" + friendUsername + @"\" + friendUsername + @".txt";
             string line;
             bool newFriend = true;
-            using (StreamReader sr = new StreamReader(myPath, Encoding.UTF8))
+            try
             {
-                line = sr.ReadLine();
-                line = sr.ReadLine();
-                line = sr.ReadLine();
-                while ((line = sr.ReadLine()) != null)
+                using (StreamReader sr = new StreamReader(myPath, Encoding.UTF8))
                 {
-                    if (line == friendUsername)
+                    line = sr.ReadLine();
+                    line = sr.ReadLine();
+                    line = sr.ReadLine();
+                    while ((line = sr.ReadLine()) != null)
                     {
-                        newFriend = false;
-                        break;
+                        if (line == friendUsername)
+                        {
+                            newFriend = false;
+                            break;
+                        }
+                    }
+                    sr.Close();
+                    sr.Dispose();
+                }
+                if (newFriend)
+                {
+                    string chatId = Guid.NewGuid().ToString();
+                    using (StreamWriter sw = new StreamWriter(myPath, true, Encoding.UTF8))
+                    {
+                        sw.WriteLine(friendUsername);
+                        sw.WriteLine(chatId);
+                        sw.Close();
+                        sw.Dispose();
+                    }
+                    using (StreamWriter sw = new StreamWriter(friendPath, true, Encoding.UTF8))
+                    {
+                        sw.WriteLine(myUsername);
+                        sw.WriteLine(chatId);
+                        sw.Close();
+                        sw.Dispose();
                     }
                 }
-                sr.Close();
-                sr.Dispose();
             }
-            if(newFriend)
+            catch (Exception)
             {
-                string chatId = Guid.NewGuid().ToString();
-                using (StreamWriter sw = new StreamWriter(myPath, true, Encoding.UTF8))
-                {
-                    sw.WriteLine(friendUsername);
-                    sw.WriteLine(chatId);
-                    sw.Close();
-                    sw.Dispose();
-                }
-                using (StreamWriter sw = new StreamWriter(friendPath, true, Encoding.UTF8))
-                {
-                    sw.WriteLine(myUsername);
-                    sw.WriteLine(chatId);
-                    sw.Close();
-                    sw.Dispose();
-                }
+                Console.WriteLine("NewFriend() Error.");
             }
             return newFriend;
         }
         public static bool ExistUser(string username)
         {
-            string line;
-            using (StreamReader sr = new StreamReader(Database_path, Encoding.UTF8))
+            try
             {
-                
-                while ((line = sr.ReadLine()) != null)
+                string line;
+                using (StreamReader sr = new StreamReader(Database_path, Encoding.UTF8))
                 {
-                    if (line == username)
-                        return true;
-                    line = sr.ReadLine();
-                    line = sr.ReadLine();
-                }
-                sr.Close();
-                sr.Dispose();
-            }
 
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (line == username)
+                            return true;
+                        line = sr.ReadLine();
+                        line = sr.ReadLine();
+                    }
+                    sr.Close();
+                    sr.Dispose();
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("ExistUser() Error.");
+            }
             return false;
         }
         public static string FindChat(string myUsername, string friendUsername)
@@ -164,50 +184,132 @@ namespace MyChatServer
         }
         public static void SaveMessage(string myUsername, string friendUsername, string message)
         {
-            string myPath = @"Users\" + myUsername + @"\" + myUsername + @".txt";
-            string line;
-            using (StreamReader sr = new StreamReader(myPath, Encoding.UTF8))
+            try
             {
-                line = sr.ReadLine();
-                line = sr.ReadLine();
-                line = sr.ReadLine();
-                while ((line = sr.ReadLine()) != null)
+                string myPath = @"Users\" + myUsername + @"\" + myUsername + @".txt";
+                string line;
+                using (StreamReader sr = new StreamReader(myPath, Encoding.UTF8))
                 {
-                    if (line == friendUsername)
+                    line = sr.ReadLine();
+                    line = sr.ReadLine();
+                    line = sr.ReadLine();
+                    while ((line = sr.ReadLine()) != null)
                     {
-                        line = sr.ReadLine();
-                        break;
+                        if (line == friendUsername)
+                        {
+                            line = sr.ReadLine();
+                            break;
+                        }
                     }
+                    sr.Close();
+                    sr.Dispose();
                 }
-                sr.Close();
-                sr.Dispose();
+
+                string chatPath = @"Chats\" + line + @".txt";
+                using (StreamWriter sw = new StreamWriter(chatPath, true, Encoding.UTF8))
+                {
+                    sw.WriteLine(message);
+                    sw.Close();
+                    sw.Dispose();
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("SaveMessage() Error.");
+            }
+        }
+        public static bool RemoveFriend(string myUsername, string friendUsername)
+        {
+            string myPath = @"Users\" + myUsername + @"\" + myUsername + @".txt";
+            string friendPath = @"Users\" + friendUsername + @"\" + friendUsername + @".txt";
+            string line;
+            List<string> infoUser = new List<string>();
+            try
+            {
+                using (StreamReader sr = new StreamReader(myPath, Encoding.UTF8))
+                {
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (line == friendUsername)
+                        {
+                            line = sr.ReadLine();
+                            continue;
+                        }
+                        infoUser.Add(line);
+                    }
+                    sr.Close();
+                    sr.Dispose();
+                }
+                File.Delete(myPath);
+
+                using (StreamWriter sw = new StreamWriter(myPath, true, Encoding.UTF8))
+                {
+                    foreach (var line1 in infoUser)
+                    {
+                        sw.WriteLine(line1);
+                    }
+                    sw.Close();
+                    sw.Dispose();
+                }
+                infoUser.Clear();
+                using (StreamReader sr = new StreamReader(friendPath, Encoding.UTF8))
+                {
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if (line == myUsername)
+                        {
+                            line = sr.ReadLine();
+                            continue;
+                        }
+                        infoUser.Add(line);
+                    }
+                    sr.Close();
+                    sr.Dispose();
+                }
+                File.Delete(friendPath);
+
+                using (StreamWriter sw = new StreamWriter(friendPath, true, Encoding.UTF8))
+                {
+                    foreach (var line2 in infoUser)
+                    {
+                        sw.WriteLine(line2);
+                    }
+                    sw.Close();
+                    sw.Dispose();
+                }
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("RemoveFriend() Error.");
+                return false;
             }
 
-            string chatPath = @"Chats\" + line + @".txt";
-            using (StreamWriter sw = new StreamWriter(chatPath, true, Encoding.UTF8))
-            {
-                sw.WriteLine(message);
-                sw.Close();
-                sw.Dispose();
-            }
+            return true;
         }
         public static List<string> FriendList(string username)
         {
             string myPath = @"Users\" + username + @"\" + username + @".txt";
             string line;
             List<string> temp = new List<string>();
-            using (StreamReader sr = new StreamReader(myPath, Encoding.UTF8))
+            try
             {
-                line = sr.ReadLine();
-                line = sr.ReadLine();
-                line = sr.ReadLine();
-                while ((line = sr.ReadLine()) != null)
+                using (StreamReader sr = new StreamReader(myPath, Encoding.UTF8))
                 {
-                    temp.Add(line);
                     line = sr.ReadLine();
+                    line = sr.ReadLine();
+                    line = sr.ReadLine();
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        temp.Add(line);
+                        line = sr.ReadLine();
+                    }
+                    sr.Close();
+                    sr.Dispose();
                 }
-                sr.Close();
-                sr.Dispose();
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("FriendList() Error.");
             }
             return temp;
         }

@@ -12,8 +12,6 @@ namespace MyChatServer
     {
         static ServerObject server; // сервер
         static Thread listenThread; // потока для прослушивания
-
-
         static void Main(string[] args)
         {
             try
@@ -29,6 +27,5 @@ namespace MyChatServer
                 Console.WriteLine(ex.Message);
             }
         }
-        
     }
 }

@@ -43,6 +43,10 @@ namespace MyChatClient
         {
             try
             {
+                if (File.Exists(Authorization_path))
+                {
+                    File.Delete(Authorization_path);
+                }
                 using (StreamWriter sw = new StreamWriter(Authorization_path, true, Encoding.UTF8))
                 {
                     sw.WriteLine(ClientLogic.Username);
@@ -52,7 +56,7 @@ namespace MyChatClient
             }
             catch (Exception)
             {
-                MessageBox.Show("Проблема с методом: SaveAuthorization();");
+                MessageBox.Show("SaveAuthorization() Error.");
             }
         }
     }

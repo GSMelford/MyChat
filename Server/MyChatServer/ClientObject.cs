@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
@@ -13,21 +14,21 @@ namespace MyChatServer
         public string Email;
         public string Password;
         public int EmailCode;
+        public string IPClient;
         protected internal NetworkStream StreamRequest { get; private set; }
         protected internal NetworkStream StreamSend { get; private set; }
         ServerObject Server;
         TcpClient TcpMainClient;
         TcpClient TcpSubClient;
-
-
-        public ClientObject(TcpClient tcpMainClient, TcpClient tcpSubClient, ServerObject server)
+        public ClientObject(string IPClient, TcpClient tcpMainClient, TcpClient tcpSubClient, ServerObject server)
         {
             Id = Guid.NewGuid().ToString();
             this.TcpMainClient = tcpMainClient;
             this.TcpSubClient = tcpSubClient;
             this.Server = server;
+            this.IPClient = IPClient;
             server.AddConnection(this);
-            Console.WriteLine($"Client ID: {Id}. Unknown connection.");
+            Console.WriteLine($"Client IP: {IPClient}. Unknown connection.");
         }
         public void SetDataUser(string username, string email, string password)
         {
@@ -45,30 +46,41 @@ namespace MyChatServer
                 DistributorRequests distributorRequests = new DistributorRequests(this, Server);
                 while (true)
                 {
-                    distributorRequests.RequestActivation(Server.GetRequest(Id));
+                    if (StreamRequest.CanRead || StreamRequest.CanRead)
+                        distributorRequests.RequestActivation(Server.GetRequest(Id));
+                    else
+                        break;
                 }
             }
             catch (Exception)
             {
-                Console.WriteLine($"Client ID: {Id}. Disconnected.");
+                Console.WriteLine("Disconnection...");
             }
             finally
             {
+                Console.WriteLine($"Client IP: {IPClient}. Disconnected.");
                 Server.RemoveConnection(this.Id);
+                Server.SendUpdateOnline();
                 Close();
             }
         }
         protected internal void SendAnswer(string json)
         {
-            byte[] data = Encoding.UTF8.GetBytes(json);
+            try
+            {
+                byte[] data = Encoding.UTF8.GetBytes(json);
 
-            Int32 sizeRequests = data.Length;
-            byte[] sizeRequestsByte = BitConverter.GetBytes(sizeRequests);
+                Int32 sizeRequests = data.Length;
+                byte[] sizeRequestsByte = BitConverter.GetBytes(sizeRequests);
 
-            StreamRequest.Write(sizeRequestsByte, 0, sizeRequestsByte.Length);
-            StreamRequest.Write(data, 0, data.Length);
+                StreamRequest.Write(sizeRequestsByte, 0, sizeRequestsByte.Length);
+                StreamRequest.Write(data, 0, data.Length);
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("SendAnswer() Error.");
+            }
         }
-        
         protected internal void Close()
         {
             if (StreamRequest != null)

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EmailForm));
             this.SendEmailCodeButton = new System.Windows.Forms.Button();
             this.EmailCodeBox = new System.Windows.Forms.TextBox();
             this.Email = new System.Windows.Forms.Label();
@@ -41,17 +42,17 @@
             this.SendEmailCodeButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.SendEmailCodeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.SendEmailCodeButton.ForeColor = System.Drawing.Color.White;
-            this.SendEmailCodeButton.Location = new System.Drawing.Point(41, 155);
+            this.SendEmailCodeButton.Location = new System.Drawing.Point(47, 103);
             this.SendEmailCodeButton.Name = "SendEmailCodeButton";
-            this.SendEmailCodeButton.Size = new System.Drawing.Size(250, 45);
+            this.SendEmailCodeButton.Size = new System.Drawing.Size(231, 45);
             this.SendEmailCodeButton.TabIndex = 1;
-            this.SendEmailCodeButton.Text = "Подтвердить";
+            this.SendEmailCodeButton.Text = "Підтвердити";
             this.SendEmailCodeButton.UseVisualStyleBackColor = false;
             this.SendEmailCodeButton.Click += new System.EventHandler(this.SendEmail_button_Click);
             // 
             // EmailCodeBox
             // 
-            this.EmailCodeBox.Location = new System.Drawing.Point(90, 94);
+            this.EmailCodeBox.Location = new System.Drawing.Point(92, 68);
             this.EmailCodeBox.MaxLength = 5;
             this.EmailCodeBox.Name = "EmailCodeBox";
             this.EmailCodeBox.Size = new System.Drawing.Size(151, 29);
@@ -61,26 +62,30 @@
             // Email
             // 
             this.Email.ForeColor = System.Drawing.Color.White;
-            this.Email.Location = new System.Drawing.Point(41, 38);
+            this.Email.Location = new System.Drawing.Point(43, 36);
             this.Email.Name = "Email";
-            this.Email.Size = new System.Drawing.Size(250, 29);
+            this.Email.Size = new System.Drawing.Size(235, 29);
             this.Email.TabIndex = 2;
-            this.Email.Text = "Введите код подтверждения:";
+            this.Email.Text = "Введіть код підтвердження:";
             // 
             // EmailForm
             // 
             this.AcceptButton = this.SendEmailCodeButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.ClientSize = new System.Drawing.Size(340, 245);
+            this.ClientSize = new System.Drawing.Size(328, 183);
             this.Controls.Add(this.Email);
             this.Controls.Add(this.EmailCodeBox);
             this.Controls.Add(this.SendEmailCodeButton);
             this.Font = new System.Drawing.Font("Open Sans SemiBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "EmailForm";
-            this.Text = "Подтверждение";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Підтвердження";
             this.ResumeLayout(false);
             this.PerformLayout();
 

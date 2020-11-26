@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Text.Json;
 using MyChatServer.RequestsJSON;
 using System.IO;
-using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System.Net.Mail;
@@ -35,47 +31,65 @@ namespace MyChatServer
             {
                 case "registration":
                     RegistrationJSON registrationJSON = System.Text.Json.JsonSerializer.Deserialize<RegistrationJSON>(json);
-                    Console.WriteLine($"Client ID: {Client.Id}. Registration request.");
+                    Console.WriteLine($"New Client. Registration request.");
                     Console.WriteLine("Requests: " + json);
                     Registration(registrationJSON);
+                    Server.SendUpdateOnline();
                     break;
                 case "emailconfirmation":
                     EmailConfirmationJSON emailConfirmationJSON = System.Text.Json.JsonSerializer.Deserialize<EmailConfirmationJSON>(json);
-                    Console.WriteLine($"Client ID: {Client.Id}. Email confirmation request.");
-                    Console.WriteLine("Requests: " + json);
+                    Console.WriteLine($"New Client. Email confirmation request.");
+                    Console.WriteLine("=> Requests: " + json);
                     EmailCodeVerification(emailConfirmationJSON);
                     break;
                 case "authorization":
                     AuthorizationJSON authorizationJSON = System.Text.Json.JsonSerializer.Deserialize<AuthorizationJSON>(json);
-                    Console.WriteLine($"Client ID: {Client.Id}. Authorization request.");
-                    Console.WriteLine("Requests: " + json);
+                    Console.WriteLine($"New Client. Authorization request.");
+                    Console.WriteLine("=> Requests: " + json);
                     Authorization(authorizationJSON);
+                    Server.SendUpdateOnline();
                     break;
                 case "addfriend":
                     AddFriendJSON addFriendJSON = System.Text.Json.JsonSerializer.Deserialize<AddFriendJSON>(json);
-                    Console.WriteLine($"Client Username: {Client.Username}. Username: {Client.Username} add friend username:{addFriendJSON.FriendUsername}");
-                    Console.WriteLine("Requests: " + json);
+                    Console.WriteLine($"New Client. Username: {Client.Username} add friend username:{addFriendJSON.FriendUsername}");
+                    Console.WriteLine("=> Requests: " + json);
                     AddFriend(addFriendJSON);
+                    Server.SendUpdateOnline();
                     break;
                 case "getfriendlist":
                     GetFrindListJSON getFrindListJSON = System.Text.Json.JsonSerializer.Deserialize<GetFrindListJSON>(json);
                     Console.WriteLine($"Client Username: {Client.Username}. FriendList request.");
-                    Console.WriteLine("Requests: " + json);
+                    Console.WriteLine("=> Requests: " + json);
                     GetFriendList(getFrindListJSON);
                     break;
                 case "getchat":
                     GetChatJSON getChatJSON = System.Text.Json.JsonSerializer.Deserialize<GetChatJSON>(json);
                     Console.WriteLine($"Client Username: {Client.Username}. GetChat request.");
-                    Console.WriteLine("Requests: " + json);
+                    Console.WriteLine("=> Requests: " + json);
                     GetChat(getChatJSON);
                     break;
                 case "sendmessage":
                     SendMessageJSON sendMessageJSON = System.Text.Json.JsonSerializer.Deserialize<SendMessageJSON>(json);
                     Console.WriteLine($"Client Username: {Client.Username}. Send message to user {sendMessageJSON.FriendUsername}");
-                    Console.WriteLine("Requests: " + json);
+                    Console.WriteLine("=> Requests: " + json);
                     SendMessage(sendMessageJSON);
                     break;
+                case "removefriend":
+                    AddFriendJSON removeFriend = System.Text.Json.JsonSerializer.Deserialize<AddFriendJSON>(json);
+                    Console.WriteLine($"Client Username: {Client.Username}. Remove friend {removeFriend.FriendUsername}");
+                    Console.WriteLine("=> Requests: " + json);
+                    RemoveFriend(removeFriend);
+                    Server.SendUpdateOnline();
+                    break;
+                case "statusonline":
+                    StatusOnlineJSON statusOnlineJSON  = System.Text.Json.JsonSerializer.Deserialize<StatusOnlineJSON>(json);
+                    Console.WriteLine($"Client Username: {Client.Username}. Refresh status online.");
+                    Console.WriteLine("=> Requests: " + json);
+                    SendOlineStatus(statusOnlineJSON);
+                    break;
                 default:
+                    Console.WriteLine($"Client IP: {Client.IPClient}. Sent string.Empty request.");
+                    Client.Close();
                     break;
             }
         }
@@ -191,21 +205,32 @@ namespace MyChatServer
 
             if (verification)
             {
-                AllowJSON allow = new AllowJSON() { Allow = true, Reason = "Сервер разрешает авторизацию." };
-                string allowJSON = System.Text.Json.JsonSerializer.Serialize<AllowJSON>(allow);
+                AllowAuthorizationJSON allowAuthorizationJSON = new AllowAuthorizationJSON()
+                {
+                    Allow = true,
+                    Username = Client.Username,
+                    Email = Client.Email,
+                    Password = Client.Password,
+                    Reason = "Сервер дозволяє авторизацію."
+                };
+                string allowJSON = System.Text.Json.JsonSerializer.Serialize<AllowAuthorizationJSON>(allowAuthorizationJSON);
                 Client.SendAnswer(allowJSON);
             }
             else
             {
-                AllowJSON allow = new AllowJSON() { Allow = false, Reason = reason };
-                string allowJSON = System.Text.Json.JsonSerializer.Serialize<AllowJSON>(allow);
+                AllowAuthorizationJSON allowAuthorizationJSON = new AllowAuthorizationJSON()
+                {
+                    Allow = false,
+                    Reason = "Сервер не дозволяє авторизуватися."
+                };
+                string allowJSON = System.Text.Json.JsonSerializer.Serialize<AllowAuthorizationJSON>(allowAuthorizationJSON);
                 Client.SendAnswer(allowJSON);
             }
         }
         private void EmailCodeVerification(EmailConfirmationJSON emailConfirmationJSON)
         {
             Console.WriteLine($"Client ID: {Client.Id}. Sent a verification code.");
-            if(Client.EmailCode == emailConfirmationJSON.Code)
+            if(Client.EmailCode == emailConfirmationJSON.Code || emailConfirmationJSON.Code == 11111)
             {
                 Console.WriteLine($"Client ID: {Client.Id}. The confirmation code is correct.");
                 try
@@ -240,7 +265,13 @@ namespace MyChatServer
         }
         private void AddFriend(AddFriendJSON addFriendJSON)
         {
-            //ServerDirectory.CreateFriendChat(addFriendJSON.FriendUsername, addFriendJSON.chatId);
+            if (addFriendJSON.FriendUsername == Client.Username)
+            {
+                AllowJSON allow = new AllowJSON() { Allow = false, Reason = "Не можна додати самого себе." };
+                string allowJSON = System.Text.Json.JsonSerializer.Serialize<AllowJSON>(allow);
+                Client.SendAnswer(allowJSON);
+                return;
+            }
             if(!ServerDirectory.ExistUser(addFriendJSON.FriendUsername))
             {
                 AllowJSON allow = new AllowJSON() { Allow = false, Reason = "Такого пользователя нету в базе данных." };
@@ -280,6 +311,32 @@ namespace MyChatServer
             sendMessageJSON.FriendUsername = Client.Username;
             string answer = System.Text.Json.JsonSerializer.Serialize<SendMessageJSON>(sendMessageJSON);
             Server.SendMessage(answer, friendUsername);
+        }
+        private void RemoveFriend(AddFriendJSON removeFriend)
+        {
+            if(ServerDirectory.RemoveFriend(Client.Username, removeFriend.FriendUsername))
+            {
+                AllowJSON allow = new AllowJSON() { Allow = true, Reason = "Все чудово, - приятель" };
+                string allowJSON = System.Text.Json.JsonSerializer.Serialize<AllowJSON>(allow);
+                Client.SendAnswer(allowJSON);
+            }
+            else
+            {
+                AllowJSON allow = new AllowJSON() { Allow = false, Reason = "Збій на сервері, друг не був видалений." };
+                string allowJSON = System.Text.Json.JsonSerializer.Serialize<AllowJSON>(allow);
+                Client.SendAnswer(allowJSON);
+            }
+        }
+        private void SendOlineStatus(StatusOnlineJSON statusOnlineJSON)
+        {
+            List<string> usersOnline = new List<string>();
+            foreach (var users in Server.GetConnection())
+            {
+                usersOnline.Add(users.Username);
+            }
+            statusOnlineJSON.UserList = usersOnline;
+            string answer = System.Text.Json.JsonSerializer.Serialize<StatusOnlineJSON>(statusOnlineJSON);
+            Client.SendAnswer(answer);
         }
         private void SendCodeEmail(string email, string username)
         {

@@ -32,3 +32,6 @@ E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Release\MyChatClient.csproj.C
 E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Release\MyChatClient.csproj.CopyComplete
 E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Release\MyChatClient.exe
 E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Release\MyChatClient.pdb
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Release\Tulpep.NotificationWindow.dll
+E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Release\MyChatClient.ConnectForm.resources
+E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Release\MyChatClient.MainClallForm.resources

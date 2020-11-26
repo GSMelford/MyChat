@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AuthorizationForm));
             this.PasswordBox = new System.Windows.Forms.TextBox();
             this.UsernameOrEmailBox = new System.Windows.Forms.TextBox();
             this.UsernameOrEmail = new System.Windows.Forms.Label();
@@ -58,9 +59,9 @@
             this.UsernameOrEmail.ForeColor = System.Drawing.Color.White;
             this.UsernameOrEmail.Location = new System.Drawing.Point(28, 74);
             this.UsernameOrEmail.Name = "UsernameOrEmail";
-            this.UsernameOrEmail.Size = new System.Drawing.Size(347, 22);
+            this.UsernameOrEmail.Size = new System.Drawing.Size(333, 22);
             this.UsernameOrEmail.TabIndex = 2;
-            this.UsernameOrEmail.Text = "Введите электроную почту или никнейм:";
+            this.UsernameOrEmail.Text = "Введіть електронну пошту або нікнейм:";
             // 
             // Password
             // 
@@ -68,9 +69,9 @@
             this.Password.ForeColor = System.Drawing.Color.White;
             this.Password.Location = new System.Drawing.Point(29, 131);
             this.Password.Name = "Password";
-            this.Password.Size = new System.Drawing.Size(145, 22);
+            this.Password.Size = new System.Drawing.Size(139, 22);
             this.Password.TabIndex = 3;
-            this.Password.Text = "Введите пароль:";
+            this.Password.Text = "Введіть пароль:";
             // 
             // Login
             // 
@@ -78,9 +79,9 @@
             this.Login.ForeColor = System.Drawing.Color.White;
             this.Login.Location = new System.Drawing.Point(125, 32);
             this.Login.Name = "Login";
-            this.Login.Size = new System.Drawing.Size(142, 22);
+            this.Login.Size = new System.Drawing.Size(143, 22);
             this.Login.TabIndex = 4;
-            this.Login.Text = "Авторизоваться";
+            this.Login.Text = "Авторизуватись";
             // 
             // ShowPasswordCheckBox
             // 
@@ -88,9 +89,9 @@
             this.ShowPasswordCheckBox.ForeColor = System.Drawing.Color.White;
             this.ShowPasswordCheckBox.Location = new System.Drawing.Point(273, 159);
             this.ShowPasswordCheckBox.Name = "ShowPasswordCheckBox";
-            this.ShowPasswordCheckBox.Size = new System.Drawing.Size(102, 26);
+            this.ShowPasswordCheckBox.Size = new System.Drawing.Size(103, 26);
             this.ShowPasswordCheckBox.TabIndex = 6;
-            this.ShowPasswordCheckBox.Text = "показать";
+            this.ShowPasswordCheckBox.Text = "показати";
             this.ShowPasswordCheckBox.UseVisualStyleBackColor = true;
             this.ShowPasswordCheckBox.CheckedChanged += new System.EventHandler(this.ShowPasswordCheckBox_CheckedChanged);
             // 
@@ -104,7 +105,7 @@
             this.LoginButton.Name = "LoginButton";
             this.LoginButton.Size = new System.Drawing.Size(343, 64);
             this.LoginButton.TabIndex = 2;
-            this.LoginButton.Text = "Авторизоваться";
+            this.LoginButton.Text = "Авторизуватись";
             this.LoginButton.UseVisualStyleBackColor = false;
             this.LoginButton.Click += new System.EventHandler(this.LoginButton_Click);
             // 
@@ -114,11 +115,11 @@
             this.Registration.Cursor = System.Windows.Forms.Cursors.Hand;
             this.Registration.Font = new System.Drawing.Font("Open Sans SemiBold", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Registration.ForeColor = System.Drawing.Color.CornflowerBlue;
-            this.Registration.Location = new System.Drawing.Point(137, 276);
+            this.Registration.Location = new System.Drawing.Point(155, 271);
             this.Registration.Name = "Registration";
-            this.Registration.Size = new System.Drawing.Size(116, 17);
+            this.Registration.Size = new System.Drawing.Size(94, 17);
             this.Registration.TabIndex = 12;
-            this.Registration.Text = "Регистрироваться";
+            this.Registration.Text = "Реєструватися";
             this.Registration.Click += new System.EventHandler(this.Registration_Click);
             // 
             // AuthorizationForm
@@ -126,6 +127,7 @@
             this.AcceptButton = this.LoginButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 22F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(404, 310);
             this.Controls.Add(this.Registration);
@@ -137,9 +139,12 @@
             this.Controls.Add(this.UsernameOrEmailBox);
             this.Controls.Add(this.PasswordBox);
             this.Font = new System.Drawing.Font("Open Sans SemiBold", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.Name = "AuthorizationForm";
-            this.Text = "AuthorizationForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Авторизація";
             this.ResumeLayout(false);
             this.PerformLayout();
 

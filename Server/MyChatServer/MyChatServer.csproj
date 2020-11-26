@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RequestsJSON\AddFriendJSON.cs" />
+    <Compile Include="RequestsJSON\AllowAuthorizationJSON.cs" />
     <Compile Include="RequestsJSON\AuthorizationJSON.cs" />
     <Compile Include="RequestsJSON\DistributorRequests.cs" />
     <Compile Include="RequestsJSON\AllowJSON.cs" />
@@ -86,6 +87,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RequestsJSON\SendMessageJSON.cs" />
+    <Compile Include="RequestsJSON\StatusOnlineJSON.cs" />
     <Compile Include="ServerDirectory.cs" />
     <Compile Include="ServerObject.cs" />
   </ItemGroup>

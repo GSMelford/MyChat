@@ -1,14 +1,5 @@
 ﻿using MyChatClient.RequestsJSON;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MyChatClient
@@ -19,13 +10,12 @@ namespace MyChatClient
         {
             InitializeComponent();
         }
-
         private void SendEmail_button_Click(object sender, EventArgs e)
         {
             int code;
             if (!int.TryParse(EmailCodeBox.Text, out code))
             {
-                MessageBox.Show("Некорректный ввод! Попробуйте ещё раз.");
+                MessageBox.Show("Некоректне введення! Спробуйте ще раз.");
                 EmailCodeBox.Clear();
             }
             else

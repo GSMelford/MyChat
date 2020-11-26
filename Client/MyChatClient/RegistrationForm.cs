@@ -14,7 +14,6 @@ namespace MyChatClient
             PasswordBox.UseSystemPasswordChar = true;
             MessengerForm = messengerForm;
         }
-
         private void ShowPassword_textBox_CheckedChanged(object sender, EventArgs e)
         {
             if (ShowPasswordCheckBox.Checked == false)
@@ -25,29 +24,24 @@ namespace MyChatClient
         private void RegistrationButton_Click(object sender, EventArgs e)
         {
 
-#if DEBUG
-            UsernameBox.Text = "GSMelford";
-            EmailBox.Text = "fedorenko.max163@gmail.com";
-            PasswordBox.Text = "ig4ghd87T%@4gsif39";
-#endif
             if (UsernameBox.Text == string.Empty)
             {
-                MessageBox.Show("Поле с ник неймом должно быть заполнено.");
+                MessageBox.Show("Поле з нік нейм не може залишатися порожнім.");
                 return;
             }
             else if (EmailBox.Text == string.Empty)
             {
-                MessageBox.Show("Поле с электроной почтой должно быть заполнено.");
+                MessageBox.Show("Поле з електронним поштою повинно бути заповнене.");
                 return;
             }
             else if (PasswordBox.Text == string.Empty)
             {
-                MessageBox.Show("Поле с паролем должно быть заполнено. Придумайте сложный пароль, ведь это защита Вашего аккаунта.");
+                MessageBox.Show("Поле з паролем повинно бути заповнене. Вигадайте важкий пароль, адже це захист Вашого аккаунта.");
                 return;
             }
             else if (PasswordBox.Text.Length < 8)
             {
-                MessageBox.Show("Ваш пароль слишком маленький. Он должен содержать больше 8 символов. Это ради Вашей безопасности.");
+                MessageBox.Show("Ваш пароль занадто маленький. Він повинен містити більше 8 символів. Це заради Вашої безпеки.");
                 return;
             }
             else
@@ -58,14 +52,14 @@ namespace MyChatClient
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("Вы ввели не адрес электройно почти.");
+                    MessageBox.Show("Ви ввели не адреси електронним пошти.");
                     return;
                 }
             }
 
             if(CreateRequests.Registration(UsernameBox.Text, EmailBox.Text, PasswordBox.Text))
             {
-                MessageBox.Show($"На вашу почту: {EmailBox.Text} был отправлен код для подтверждения.");
+                MessageBox.Show($"На вашу пошту {EmailBox.Text} був відправлений код для підтвердження.");
                 EmailForm emailForm = new EmailForm();
                 emailForm.ShowDialog();
                 if (ClientLogic.Registered)
@@ -84,17 +78,18 @@ namespace MyChatClient
             if(!ClientLogic.Registered)
                 Environment.Exit(0);
         }
-
         private void LoginLabel_Click(object sender, EventArgs e)
         {
             AuthorizationForm authorizationForm = new AuthorizationForm(this);
-            this.Hide();
+            ClientLogic.Registered = false;
+            Hide();
             authorizationForm.ShowDialog();
             if(ClientLogic.Registered)
             {
                 MessengerForm.Show();
-                this.Close();
+                Close();
             }
+            Show();
         }
     }
 }

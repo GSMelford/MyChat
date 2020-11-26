@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Windows.Forms;
-using System.Text.Json;
-using System.Runtime.InteropServices;
 using System.Text;
-using MyChatClient.RequestsJSON;
-using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Threading;
-using System.IO;
 using MyChatClient.ServerAnswerJSON;
 
 namespace MyChatClient
@@ -19,9 +12,8 @@ namespace MyChatClient
         public static string Username = string.Empty;
         public static string Email = string.Empty;
         public static string Password = string.Empty;
-        public static string FriendUserNow = string.Empty;
         public static bool Registered = false;
-        public static bool Authorization = false;
+        public static bool Connected = false;
 
         private const string Host = "178.150.32.105";
         private const int Port = 1234;
@@ -34,6 +26,9 @@ namespace MyChatClient
         static public MessengerForm messengerForm;
 
         public static List<Button> FriendList = new List<Button>();
+        public static List<Button> FriendListRemove = new List<Button>();
+        public static List<string> UsersOnline = new List<string>();
+
         public static bool ConnectToServer()
         {
             Client = new TcpClient();
@@ -53,60 +48,85 @@ namespace MyChatClient
         }
         public static void SendMessage(string json)
         {
-            byte[] data = Encoding.UTF8.GetBytes(json);
+            try
+            {
+                if (Connected)
+                {
+                    byte[] data = Encoding.UTF8.GetBytes(json);
 
-            Int32 sizeRequests = data.Length;
-            byte[] sizeRequestsByte = BitConverter.GetBytes(sizeRequests);
+                    Int32 sizeRequests = data.Length;
+                    byte[] sizeRequestsByte = BitConverter.GetBytes(sizeRequests);
 
-            StreamRequest.Write(sizeRequestsByte, 0, sizeRequestsByte.Length);
-            StreamRequest.Write(data, 0, data.Length);
+                    StreamRequest.Write(sizeRequestsByte, 0, sizeRequestsByte.Length);
+                    StreamRequest.Write(data, 0, data.Length);
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("SendMessage() Error.");
+            }
         }
         public static string GetAnswer()
         {
-            StringBuilder builder = new StringBuilder();
-            int bytes = 0;
-            byte[] sizeRequestsByte = new byte[4];
-            StreamRequest.Read(sizeRequestsByte, 0, sizeRequestsByte.Length);
-            byte[] requestsByte = new byte[BitConverter.ToInt32(sizeRequestsByte, 0)];
-            bytes = StreamRequest.Read(requestsByte, 0, BitConverter.ToInt32(sizeRequestsByte, 0));
-            builder.Append(Encoding.UTF8.GetString(requestsByte, 0, bytes));
-            return builder.ToString();
+            try
+            {
+                if (Connected)
+                {
+                    StringBuilder builder = new StringBuilder();
+                    int bytes = 0;
+                    byte[] sizeRequestsByte = new byte[4];
+                    StreamRequest.Read(sizeRequestsByte, 0, sizeRequestsByte.Length);
+                    byte[] requestsByte = new byte[BitConverter.ToInt32(sizeRequestsByte, 0)];
+                    bytes = StreamRequest.Read(requestsByte, 0, BitConverter.ToInt32(sizeRequestsByte, 0));
+                    builder.Append(Encoding.UTF8.GetString(requestsByte, 0, bytes));
+                    return builder.ToString();
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("GetAnswer() Error.");
+            }
+            return string.Empty;
         }
-
         public static void GetServerAnswer()
         {
             DistributorAnswer distributorAnswer = new DistributorAnswer(messengerForm);
             while (true)
             {
-                try
+                if(Connected)
                 {
-                    StringBuilder builder = new StringBuilder();
-                    int bytes = 0;
-                    byte[] sizeRequestsByte = new byte[4];
-                    StreamAnswer.Read(sizeRequestsByte, 0, sizeRequestsByte.Length);
-                    byte[] requestsByte = new byte[BitConverter.ToInt32(sizeRequestsByte, 0)];
-                    bytes = StreamAnswer.Read(requestsByte, 0, BitConverter.ToInt32(sizeRequestsByte, 0));
-                    builder.Append(Encoding.UTF8.GetString(requestsByte, 0, bytes));
-                    distributorAnswer.AnswerActivation(builder.ToString());
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show("Что-то пошло не так с GetServerAnswer();");
-                    break;
+                    try
+                    {
+                        StringBuilder builder = new StringBuilder();
+                        int bytes = 0;
+                        byte[] sizeRequestsByte = new byte[4];
+                        StreamAnswer.Read(sizeRequestsByte, 0, sizeRequestsByte.Length);
+                        byte[] requestsByte = new byte[BitConverter.ToInt32(sizeRequestsByte, 0)];
+                        bytes = StreamAnswer.Read(requestsByte, 0, BitConverter.ToInt32(sizeRequestsByte, 0));
+                        builder.Append(Encoding.UTF8.GetString(requestsByte, 0, bytes));
+                        distributorAnswer.AnswerActivation(builder.ToString());
+                    }
+                    catch (Exception)
+                    {
+                        messengerForm.AsyncTryConnectToServer();
+                        break;
+                    }
                 }
             }
         }
-
-        static void Disconnect()
+        public static void Disconnect()
         {
-            if (StreamRequest != null)
-                StreamRequest.Close();
-            if (StreamAnswer != null)
-                StreamAnswer.Close();
-            if (Client != null)
-                Client.Close();
-            if (SubClient != null)
-                SubClient.Close();
+            if(Connected)
+            {
+                if (StreamRequest != null)
+                    StreamRequest.Close();
+                if (StreamAnswer != null)
+                    StreamAnswer.Close();
+                if (Client != null)
+                    Client.Close();
+                if (SubClient != null)
+                    SubClient.Close();
+            }
         }
     }
 }

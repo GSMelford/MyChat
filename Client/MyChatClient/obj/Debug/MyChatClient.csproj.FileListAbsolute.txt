@@ -91,3 +91,6 @@ E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.Authorizat
 E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.MessengerForm.resources
 E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\Newtonsoft.Json.dll
 E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\Newtonsoft.Json.xml
+E:\Files\C# Project\MyChat\Client\MyChatClient\bin\Debug\Tulpep.NotificationWindow.dll
+E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.ConnectForm.resources
+E:\Files\C# Project\MyChat\Client\MyChatClient\obj\Debug\MyChatClient.MainClallForm.resources
